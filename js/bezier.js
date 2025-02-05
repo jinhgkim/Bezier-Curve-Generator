@@ -27,9 +27,13 @@ class Bezier {
                 //  - this.nCK(m, i) computes "m choose i", aka: (m over i)
                 //  - Math.pow(t, i) computes t raised to the power i
 
-                //@@@@@
-                // YOUR CODE HERE
-                //@@@@@
+                var m = this.control_points.length - 1;
+                var ans = new Vec2(0, 0);
+                for (var i = 0; i < m + 1; i++) {
+                    var basis_func = this.nCK(m, i) * Math.pow(t, i) * Math.pow(1 - t, m - i);
+                    ans = sum(ans, this.control_points[i].scale(basis_func));
+                }
+                return ans;
             }
         }
     };
@@ -64,9 +68,11 @@ class Bezier {
                 // You may use the this.drawLine() function to do the actual
                 // drawing of line segments.
 
-                //@@@@@
-                // YOUR CODE HERE
-                //@@@@@
+                var step_size = 1 / this.samples;
+                for (var i = 0; i <= 1;) {
+                    this.draw_line(this.eval_curve(i), this.eval_curve(i + step_size));
+                    i += step_size;
+                }
             }
             else if (this.curve_mode == "DeCasteljau") {
                 // DeCasteljau mode
@@ -83,8 +89,7 @@ class Bezier {
                 //@@@@@
             }
             else if (this.curve_mode == "Spline") {
-                if (this.continuity_mode == "C0")
-                {
+                if (this.continuity_mode == "C0") {
                     // C0 continuity
                     //
                     // Each piecewise curve should be C0 continuous with adjacent
@@ -94,8 +99,7 @@ class Bezier {
                     // YOUR CODE HERE
                     //@@@@@
                 }
-                else if (this.continuity_mode == "C1")
-                {
+                else if (this.continuity_mode == "C1") {
                     // C1 continuity
                     //
                     // Each piecewise curve should be C1 continuous with adjacent
@@ -242,7 +246,7 @@ class Bezier {
      * @param point Vec2 A 2D vector that is needed to be removed from control points
      */
     remove_control_point(point) {
-        var pos =  this.points.indexOf(point);
+        var pos = this.points.indexOf(point);
         this.control_points.splice(pos, 1);
     };
 
