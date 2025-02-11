@@ -1,6 +1,8 @@
 # 1. Draw a Beizer curve
 ![bezier](https://github.com/jinhgkim/Bezier-Curve-Generator/blob/master/bezier.gif)
 
-# More to come...
-1. Curve Subdivision via de Casteljau's Algorithm
-2. Splines
+# 2. Subdivision via de Casteljau's Algorithm
+![subdivision](https://github.com/jinhgkim/Bezier-Curve-Generator/blob/master/subdivision.gif)
+
+# More to come...  
+1. Splines
