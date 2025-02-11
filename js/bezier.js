@@ -44,10 +44,24 @@ class Bezier {
      * @param curve2 The second curve
      */
     subdivide_curve(curve1, curve2) {
+        var t = 0.5
+        var n = this.control_points.length
+        var temp = this.control_points.slice()
 
-        //@@@@@
-        // YOUR CODE HERE
-        //@@@@@
+        curve1.control_points.push(temp[0]);     // Add first point 
+        curve2.control_points.push(temp[n - 1]); // Add last point 
+
+        // Calculate midpoints
+        for (var m = 0; m < n; m++) {
+            for (var i = 0; i < n - m - 1; i++) {
+                temp[i] = sum(temp[i].scale(t), temp[i + 1].scale(1 - t));
+            }
+
+            curve1.control_points.push(temp[0]);         // Add first point 
+            curve2.control_points.push(temp[n - m - 1]); // Add last point 
+        }
+
+        return [curve1, curve2]
     };
 
 
@@ -84,9 +98,24 @@ class Bezier {
                 // to the actual bezier curve, so we only need to draw their
                 // control polygons.
 
-                //@@@@@
-                // YOUR CODE HERE
-                //@@@@@
+                var curves = [this]; // Start with the initial curve
+
+                for (var count = 0; count < this.subdivide_level; count++) {
+                    var newCurves = [];
+                    for (var i = 0; i < curves.length; i++) {
+                        var curve1 = new Bezier();
+                        var curve2 = new Bezier();
+                        var [left, right] = curves[i].subdivide_curve(curve1, curve2);
+                        newCurves.push(left, right);
+                    }
+                    curves = newCurves;
+                }
+
+                // Draw each bezier curve
+                for (var i = 0; i < curves.length; i++) {
+                    curves[i].set_GL(this.gl_operation)
+                    curves[i].draw_control_polygon();
+                }
             }
             else if (this.curve_mode == "Spline") {
                 if (this.continuity_mode == "C0") {
