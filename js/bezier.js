@@ -44,9 +44,9 @@ class Bezier {
      * @param curve2 The second curve
      */
     subdivide_curve(curve1, curve2) {
-        var t = 0.5
-        var n = this.control_points.length
-        var temp = this.control_points.slice()
+        var t = 0.5;
+        var n = this.control_points.length;
+        var temp = this.control_points.slice();
 
         curve1.control_points.push(temp[0]);     // Add first point 
         curve2.control_points.push(temp[n - 1]); // Add last point 
@@ -61,7 +61,7 @@ class Bezier {
             curve2.control_points.push(temp[n - m - 1]); // Add last point 
         }
 
-        return [curve1, curve2]
+        return [curve1, curve2];
     };
 
 
@@ -113,7 +113,7 @@ class Bezier {
 
                 // Draw each bezier curve
                 for (var i = 0; i < curves.length; i++) {
-                    curves[i].set_GL(this.gl_operation)
+                    curves[i].set_GL(this.gl_operation);
                     curves[i].draw_control_polygon();
                 }
             }
@@ -124,9 +124,30 @@ class Bezier {
                     // Each piecewise curve should be C0 continuous with adjacent
                     // curves, meaning they should share an endpoint.
 
-                    //@@@@@
-                    // YOUR CODE HERE
-                    //@@@@@
+                    var N = this.control_points.length;
+                    var d = this.piecewise_degree;
+                    var curve_count = Math.ceil((N - 1) / d)
+
+                    for (var c = 0; c < curve_count; c++) {
+                        var curve = new Bezier();
+                        curve.set_GL(this.gl_operation)
+
+                        //Extract control points
+                        for (var i = 0; i < d + 1; i++) {
+                            var idx = i + c * d;
+                            if (idx < N)
+                                curve.add_control_point(this.control_points[idx]);
+                        }
+
+                        // Draw
+                        var step_size = 1 / this.samples;
+                        for (var i = 0; i <= 1;) {
+                            curve.draw_line(curve.eval_curve(i), curve.eval_curve(i + step_size));
+                            i += step_size;
+                        }
+                    }
+
+
                 }
                 else if (this.continuity_mode == "C1") {
                     // C1 continuity
