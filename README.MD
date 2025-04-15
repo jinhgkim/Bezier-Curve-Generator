@@ -1,5 +1,3 @@
-Jinnie Kim 72665243 jinkim11@students.cs.ubc.ca
-
 # 1. Draw a Beizer curve
 ![bezier](https://github.com/jinhgkim/Bezier-Curve-Generator/blob/master/bezier.gif)
 
